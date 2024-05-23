@@ -1,17 +1,167 @@
-import { Component } from '@angular/core';
-
+import { Component, OnInit, inject } from '@angular/core';
+import { DashboardService } from '../dashboard.service';
+import { MatCardModule } from '@angular/material/card';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [],
+  imports: [CommonModule, MatCardModule, MatDialogModule, MatButtonModule, ReactiveFormsModule, MatSelectModule],
   template: `
-    <p>
-      dashboard works!
-    </p>
+    <h1 class="title" >Minhas Finanças</h1>
+<div class="flex header">
+    <div>
+        <mat-form-field appearance="fill" class="input-item">
+            <mat-label>Mês</mat-label>
+            <mat-select>
+              <mat-option>Selecione o mês</mat-option>
+              <mat-option *ngFor="let mes of meses" [value]="mes.value">{{mes.viewValue}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+    </div>
+
+    <div >
+        
+        <mat-form-field appearance="fill" class="input-item">
+          <mat-label>Ano</mat-label>
+          <mat-select>
+            <mat-option value="2023" >2023</mat-option>
+          </mat-select>
+        </mat-form-field>
+    </div>
+
+
+</div>
+
+<div class="flex card-item">
+
+    <div class="flex-item">
+
+        <mat-card class="receita">
+            <mat-card-header class="center">
+                <mat-card-title class="titulo">
+                    Receitas
+                </mat-card-title>
+            </mat-card-header>
+        
+            <mat-card-content class="center conteudo">
+                R$ 50,00
+            </mat-card-content>
+        </mat-card>
+        
+    </div>
+
+    <div class="flex-item">
+
+        <mat-card class="despesa">
+            <mat-card-header class="center">
+                <mat-card-title class="titulo">
+                    Despesas
+                </mat-card-title>
+            </mat-card-header>
+        
+            <mat-card-content class="center conteudo">
+                R$ 50,00
+            </mat-card-content>
+        </mat-card>
+        
+    </div>
+
+    <div class="flex-item">
+
+        <mat-card class="saldo">
+            <mat-card-header class="center">
+                <mat-card-title class="titulo">
+                    Saldo
+                </mat-card-title>
+            </mat-card-header>
+        
+            <mat-card-content class="center conteudo">
+                R$ 0,00
+            </mat-card-content>
+        </mat-card>
+        
+    </div>
+
+    
+</div>
+
   `,
-  styles: ``
+  styles: `
+  .flex {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.header {
+    height: 300px;
+}
+
+.title {
+    position: relative;
+    font-size: 3rem;
+    top: 24px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+
+.mat-mdc-card {
+    width: 400px;
+    height: 120px;
+}
+
+.input-item {
+    width: 400px;
+    margin-top: 90px;
+
+}
+
+.card-item {
+    margin-top: 50px;
+    position: relative;
+    top: -130px;
+}
+
+.flex-item {
+    width: 100%;
+    padding: 1.2rem;
+}
+
+.center {
+    margin: 0 auto;
+}
+
+.conteudo{
+    font-size: 1.5rem;
+}
+
+.titulo {
+    font-size: 1.6rem;
+    padding: 20px;
+}
+
+.receita {
+    background-color: rgb(75, 179, 75);
+    color: #fff;
+}
+
+.despesa {
+    background-color: rgb(190, 81, 81);
+    color: #fff;
+}
+
+.saldo {
+    background-color: rgb(35, 127, 177);
+    color: #fff;
+}
+  `
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
   meses = [
     { value: 0, viewValue: 'Janeiro'},
     { value: 1, viewValue: 'Fevereiro'},
@@ -26,5 +176,17 @@ export class DashboardComponent {
     { value: 10, viewValue: 'Novembro'},
     { value: 11, viewValue: 'Dezembro'}
   ]
+
+  entradas: any[] = [];
+  dashboardService = inject(DashboardService);
+
+  ngOnInit(): void {
+    this.dashboardService.getEntradas()
+    .subscribe(entradas => { 
+      console.log(entradas);
+      
+    });
+    
+  }
 
 }

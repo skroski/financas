@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, Injector, inject } from '@angular/core';
+import { Injectable, Injector} from '@angular/core';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -7,10 +7,11 @@ import { Observable } from 'rxjs';
 })
 export class HttpBaseService {
 
-  public httpClient!: HttpClient;
-  injector = inject(Injector)
+  private apiBaseUrl = 'http://localhost:3000/';
 
-  ngOnInit(): void {
+  public httpClient!: HttpClient;
+
+  constructor(protected readonly injector: Injector) {
     if(this.injector == null || this.injector == undefined) {
       throw new Error("Injector is required");
     }
@@ -18,16 +19,16 @@ export class HttpBaseService {
   }
 
   public httpGet(endpoint: string): Observable<any> {
-    return this.httpClient.get(endpoint);
+    return this.httpClient.get(`${this.apiBaseUrl}${endpoint}`);
   }
-  public httpPost(endpoint: string): Observable<any> {
-    return this.httpClient.get(endpoint);
+  public httpPost(endpoint: string, dados: any): Observable<any> {
+    return this.httpClient.post(`${this.apiBaseUrl}${endpoint}`, dados);
   }
-  public httpPut(endpoint: string): Observable<any> {
-    return this.httpClient.get(endpoint);
+  public httpPut(endpoint: string, dados: any): Observable<any> {
+    return this.httpClient.put(`${this.apiBaseUrl}${endpoint}`, dados);
   }
   public httpDelete(endpoint: string): Observable<any> {
-    return this.httpClient.get(endpoint);
+    return this.httpClient.delete(endpoint);
   }
 
 
