@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class DashboardService extends HttpBaseService {
-  endpoint = 'entradas';
+  private endpoint = 'entradas';
 
   constructor(protected override readonly injector: Injector) { 
     super(injector);

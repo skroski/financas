@@ -6,89 +6,78 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { Entrada } from './models/entrada.model';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatDialogModule, MatButtonModule, ReactiveFormsModule, MatSelectModule],
+  imports: [
+    CommonModule,
+    MatCardModule,
+    MatDialogModule,
+    MatButtonModule,
+    ReactiveFormsModule,
+    MatSelectModule,
+  ],
   template: `
-    <h1 class="title" >Minhas Finanças</h1>
-<div class="flex header">
-    <div>
+    <h1 class="title">Minhas Finanças</h1>
+    <div class="flex header">
+      <div>
         <mat-form-field appearance="fill" class="input-item">
-            <mat-label>Mês</mat-label>
-            <mat-select>
-              <mat-option>Selecione o mês</mat-option>
-              <mat-option *ngFor="let mes of meses" [value]="mes.value">{{mes.viewValue}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-    </div>
+          <mat-label>Mês</mat-label>
+          <mat-select>
+            <mat-option>Selecione o mês</mat-option>
+            <mat-option *ngFor="let mes of meses" [value]="mes.value">{{
+              mes.viewValue
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
 
-    <div >
-        
+      <div>
         <mat-form-field appearance="fill" class="input-item">
           <mat-label>Ano</mat-label>
           <mat-select>
-            <mat-option value="2023" >2023</mat-option>
+            <mat-option value="2023">2023</mat-option>
           </mat-select>
         </mat-form-field>
+      </div>
     </div>
 
-
-</div>
-
-<div class="flex card-item">
-
-    <div class="flex-item">
-
+    <div class="flex card-item">
+      <div class="flex-item">
         <mat-card class="receita">
-            <mat-card-header class="center">
-                <mat-card-title class="titulo">
-                    Receitas
-                </mat-card-title>
-            </mat-card-header>
-        
-            <mat-card-content class="center conteudo">
-                R$ 50,00
-            </mat-card-content>
+          <mat-card-header class="center">
+            <mat-card-title class="titulo"> Receitas </mat-card-title>
+          </mat-card-header>
+
+          <mat-card-content class="center conteudo">
+          {{ receita | currency: 'BRL' }}
+          </mat-card-content>
         </mat-card>
-        
-    </div>
+      </div>
 
-    <div class="flex-item">
-
+      <div class="flex-item">
         <mat-card class="despesa">
-            <mat-card-header class="center">
-                <mat-card-title class="titulo">
-                    Despesas
-                </mat-card-title>
-            </mat-card-header>
-        
-            <mat-card-content class="center conteudo">
-                R$ 50,00
-            </mat-card-content>
+          <mat-card-header class="center">
+            <mat-card-title class="titulo"> Despesas </mat-card-title>
+          </mat-card-header>
+
+          <mat-card-content class="center conteudo">
+            {{ despesa | currency: 'BRL' }}
+          </mat-card-content>
         </mat-card>
-        
-    </div>
+      </div>
 
-    <div class="flex-item">
-
+      <div class="flex-item">
         <mat-card class="saldo">
-            <mat-card-header class="center">
-                <mat-card-title class="titulo">
-                    Saldo
-                </mat-card-title>
-            </mat-card-header>
-        
-            <mat-card-content class="center conteudo">
-                R$ 0,00
-            </mat-card-content>
+          <mat-card-header class="center">
+            <mat-card-title class="titulo"> Saldo </mat-card-title>
+          </mat-card-header>
+
+          <mat-card-content class="center conteudo"> {{ saldo | currency: 'BRL'}} </mat-card-content>
         </mat-card>
-        
+      </div>
     </div>
-
-    
-</div>
-
   `,
   styles: `
   .flex {
@@ -159,34 +148,57 @@ import { ReactiveFormsModule } from '@angular/forms';
     background-color: rgb(35, 127, 177);
     color: #fff;
 }
-  `
+  `,
 })
 export class DashboardComponent implements OnInit {
   meses = [
-    { value: 0, viewValue: 'Janeiro'},
-    { value: 1, viewValue: 'Fevereiro'},
-    { value: 2, viewValue: 'Março'},
-    { value: 3, viewValue: 'Abril'},
-    { value: 4, viewValue: 'Maio'},
-    { value: 5, viewValue: 'Junho'},
-    { value: 6, viewValue: 'Julho'},
-    { value: 7, viewValue: 'Agosto'},
-    { value: 8, viewValue: 'Setembro'},
-    { value: 9, viewValue: 'Outubro'},
-    { value: 10, viewValue: 'Novembro'},
-    { value: 11, viewValue: 'Dezembro'}
-  ]
+    { value: 0, viewValue: 'Janeiro' },
+    { value: 1, viewValue: 'Fevereiro' },
+    { value: 2, viewValue: 'Março' },
+    { value: 3, viewValue: 'Abril' },
+    { value: 4, viewValue: 'Maio' },
+    { value: 5, viewValue: 'Junho' },
+    { value: 6, viewValue: 'Julho' },
+    { value: 7, viewValue: 'Agosto' },
+    { value: 8, viewValue: 'Setembro' },
+    { value: 9, viewValue: 'Outubro' },
+    { value: 10, viewValue: 'Novembro' },
+    { value: 11, viewValue: 'Dezembro' },
+  ];
 
   entradas: any[] = [];
+  saldo = 0;
+  despesa = 0;
+  receita = 0;
+
   dashboardService = inject(DashboardService);
 
   ngOnInit(): void {
     this.dashboardService.getEntradas()
-    .subscribe(entradas => { 
+    .subscribe((entradas) => {
       console.log(entradas);
-      
+      this.entradas = entradas;
+      this.getReceitas();
+      this.getDespesas();
+      this.getSaldo();
     });
-    
+  }
+  getReceitas() {
+    return this.entradas.forEach((entrada: Entrada) => {
+      if (entrada.tipo === 'receita') {
+        this.receita += parseInt(entrada.valor);
+      }
+    });
+  }
+  getDespesas() {
+    return this.entradas.forEach((entrada: Entrada) => {
+      if (entrada.tipo === 'despesa') {
+        this.despesa += parseInt(entrada.valor);
+      }
+    });
   }
 
+  getSaldo() {
+    this.saldo = this.receita - this.despesa;
+  }
 }

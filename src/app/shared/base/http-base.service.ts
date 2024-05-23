@@ -9,7 +9,7 @@ export class HttpBaseService {
 
   private apiBaseUrl = 'http://localhost:3000/';
 
-  public httpClient!: HttpClient;
+  private readonly httpClient!: HttpClient;
 
   constructor(protected readonly injector: Injector) {
     if(this.injector == null || this.injector == undefined) {
@@ -18,16 +18,16 @@ export class HttpBaseService {
     this.httpClient = this.injector.get(HttpClient);
   }
 
-  public httpGet(endpoint: string): Observable<any> {
+  protected httpGet(endpoint: string): Observable<any> {
     return this.httpClient.get(`${this.apiBaseUrl}${endpoint}`);
   }
-  public httpPost(endpoint: string, dados: any): Observable<any> {
+  protected httpPost(endpoint: string, dados: any): Observable<any> {
     return this.httpClient.post(`${this.apiBaseUrl}${endpoint}`, dados);
   }
-  public httpPut(endpoint: string, dados: any): Observable<any> {
+  protected httpPut(endpoint: string, dados: any): Observable<any> {
     return this.httpClient.put(`${this.apiBaseUrl}${endpoint}`, dados);
   }
-  public httpDelete(endpoint: string): Observable<any> {
+  protected httpDelete(endpoint: string): Observable<any> {
     return this.httpClient.delete(endpoint);
   }
 
