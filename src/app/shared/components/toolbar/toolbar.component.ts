@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -9,9 +9,9 @@ import { MatIconModule } from '@angular/material/icon';
   template: `
     <mat-toolbar color="primary">
       <span>Finanças</span>
-      <span class="example-spacer"></span>
+      <span class="example-sspacer"></span>
       <nav>
-        @for ( link of linksMenu ; track link.rota) {
+        @for ( link of menu ; track link.rota) {
         <a class="text-xl font-bold hover:text-purple-100 cursor-pointer mx-4"  routerLinkActive="active">{{ link.title }}</a>
         }
       </nav>
@@ -29,9 +29,5 @@ import { MatIconModule } from '@angular/material/icon';
 `,
 })
 export class ToolbarComponent {
-  linksMenu: any = [
-    { title: 'Dashboard', rota: 'dashboard' },
-    { title: 'Categorias', rota: 'categoria' },
-    { title: 'Entradas', rota: 'entradas' },
-  ]
+  @Input() menu!: any[];
 }

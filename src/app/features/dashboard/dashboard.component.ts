@@ -38,6 +38,7 @@ import { Entrada } from './models/entrada.model';
           <mat-label>Ano</mat-label>
           <mat-select>
             <mat-option value="2023">2023</mat-option>
+            <mat-option value="2024">2024</mat-option>
           </mat-select>
         </mat-form-field>
       </div>
