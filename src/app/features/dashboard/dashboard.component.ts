@@ -175,13 +175,12 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.dashboardService.getEntradas()
-    .subscribe((entradas) => {
-      console.log(entradas);
-      this.entradas = entradas;
-      this.getReceitas();
-      this.getDespesas();
-      this.getSaldo();
-    });
+      .subscribe((entradas) => {
+        this.entradas = entradas;
+        this.getReceitas();
+        this.getDespesas();
+        this.getSaldo();
+      });
   }
   getReceitas() {
     return this.entradas.forEach((entrada: Entrada) => {

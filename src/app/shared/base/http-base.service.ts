@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, Injector} from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -12,8 +12,8 @@ export class HttpBaseService {
   private readonly httpClient!: HttpClient;
 
   constructor(protected readonly injector: Injector) {
-    if(this.injector == null || this.injector == undefined) {
-      throw new Error("Injector is required");
+    if (this.injector == null || this.injector == undefined) {
+      throw new Error("O Injetor não pode ser nulo");
     }
     this.httpClient = this.injector.get(HttpClient);
   }
