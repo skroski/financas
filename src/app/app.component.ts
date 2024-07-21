@@ -16,7 +16,7 @@ export class AppComponent {
   title = 'financas';
   menu: any = [
     { title: 'Dashboard', rota: 'dashboard' },
-    { title: 'Categorias', rota: 'categoria' },
+    { title: 'Categorias', rota: 'categorias' },
     //{ title: 'Entradas', rota: 'entradas' },
   ]
 }
