@@ -11,8 +11,8 @@ import { MatIconModule } from '@angular/material/icon';
       <span>Finanças</span>
       <span class="example-spacer"></span>
       <nav>
-        @for ( link of linksMenu ; track link.link) {
-        <a class="mr-2" routerLinkActive="link.link">{{ link.label }}</a>
+        @for ( link of linksMenu ; track link.rota) {
+        <a class="text-xl font-bold hover:text-purple-100 cursor-pointer mx-4"  routerLinkActive="active">{{ link.title }}</a>
         }
       </nav>
     </mat-toolbar>
@@ -30,8 +30,8 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class ToolbarComponent {
   linksMenu: any = [
-    { label: 'Dashboard', link: 'dashboard' },
-    { label: 'Categorias', link: 'categoria' },
-    { label: 'Entradas', link: 'entradas' },
+    { title: 'Dashboard', rota: 'dashboard' },
+    { title: 'Categorias', rota: 'categoria' },
+    { title: 'Entradas', rota: 'entradas' },
   ]
 }
