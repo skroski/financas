@@ -12,7 +12,7 @@ import { RouterModule } from '@angular/router';
       <h2>Finanças</h2>
       <nav>
         @for ( link of menu ; track link.rota) {
-        <a class="text-xl font-bold hover:text-purple-100 cursor-pointer mx-4" [routerLink]="[link.rota]" routerLinkActive="router-link-active">{{ link.title }}</a>
+        <a class="text-xl font-bold hover:text-purple-100 cursor-pointer mx-4" [routerLink]="[link.rota]" routerLinkActive="active">{{ link.title }}</a>
         }
       </nav>
     </mat-toolbar>
