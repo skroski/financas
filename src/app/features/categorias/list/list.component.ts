@@ -3,12 +3,14 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { CategoriasService } from '../categorias.service';
 import { Categoria } from '../categoria.model';
+import { MatIconModule } from '@angular/material/icon';
+import { Router } from '@angular/router';
 
 
 @Component({
   selector: 'app-list',
   standalone: true,
-  imports: [MatPaginator, MatPaginatorModule, MatTableModule],
+  imports: [MatPaginator, MatPaginatorModule, MatTableModule, MatIconModule],
   template: `
    <div class="mx-8">
   <table mat-table [dataSource]="dataSource">
@@ -19,10 +21,22 @@ import { Categoria } from '../categoria.model';
       <td mat-cell *matCellDef="let element"> {{element.nome}} </td>
     </ng-container>
 
-    <!-- DescriçãoColumn -->
+    <!-- Descrição Column -->
     <ng-container matColumnDef="descricao">
       <th mat-header-cell *matHeaderCellDef> Descrição </th>
-      <td mat-cell *matCellDef="let element"> {{element.descricao}} </td>
+      <td mat-cell *matCellDef="let element"> {{ element.descricao }} </td>
+    </ng-container>
+
+     <!-- Editar Column -->
+     <ng-container matColumnDef="editar">
+      <th mat-header-cell *matHeaderCellDef> Edição </th>
+      <td mat-cell *matCellDef="let element"> <mat-icon (click)="chamarEdicao(element)" class="text-orange-400 cursor-pointer">edit</mat-icon> </td>
+    </ng-container>
+
+     <!-- Deletar Column -->
+     <ng-container matColumnDef="deletar">
+      <th mat-header-cell *matHeaderCellDef> Deletar </th>
+      <td mat-cell *matCellDef="let element"> <mat-icon class="text-red-700 cursor-pointer">delete</mat-icon> </td>
     </ng-container>
 
 
@@ -41,12 +55,13 @@ import { Categoria } from '../categoria.model';
 })
 export class ListComponent implements AfterViewInit, OnInit {
 
-  displayedColumns: string[] = ['nome', 'descricao'];
+  displayedColumns: string[] = ['nome', 'descricao', 'editar', 'deletar'];
   dataSource = new MatTableDataSource<Categoria>();
   categorias: Categoria[] = [];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   private categoriasService = inject(CategoriasService);
+  private router = inject(Router);
 
   ngOnInit(): void {
     this.categoriasService.getCategorias()
@@ -57,6 +72,9 @@ export class ListComponent implements AfterViewInit, OnInit {
   }
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+  }
+  chamarEdicao(categoria: Categoria): void {
+    this.router.navigate(['categorias', 'editar', categoria.id]);
   }
 }
 
