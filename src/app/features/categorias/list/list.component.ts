@@ -2,7 +2,7 @@ import { AfterViewInit, Component, inject, OnInit, ViewChild } from '@angular/co
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { CategoriasService } from '../categorias.service';
-import { Categoria } from '../categoria.model';
+import { Categoria } from '../models/categoria.model';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 

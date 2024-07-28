@@ -5,15 +5,8 @@ export const APP_ROUTES: Routes = [
   { path: 'dashboard', component: DashboardComponent },
   {
     path: 'categorias',
-    loadComponent: () =>
-      import('./features/categorias/categorias.component')
-        .then(c => c.CategoriasComponent)
-
-  },
-  {
-    path: 'editar/:id',
-    loadComponent: () =>
-      import('./features/categorias/formulario/formulario.component')
-        .then(c => c.FormularioComponent)
+    loadChildren: () =>
+      import('./features/categorias/categorias.route')
+        .then(r => r.CATEGORIAS_ROUTER)
   }
 ];

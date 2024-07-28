@@ -1,7 +1,7 @@
 import { Injectable, Injector } from '@angular/core';
 import { HttpBaseService } from '../../shared/base/http-base.service';
 import { Observable } from 'rxjs';
-import { Categoria } from './categoria.model';
+import { Categoria } from './models/categoria.model';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +17,7 @@ export class CategoriasService extends HttpBaseService {
     return this.httpGet(this.endpoint);
   }
 
-  getCategoriasPeloId(id: number): Observable<any> {
+  getCategoriasById(id: number): Observable<any> {
     return this.httpGet(`${this.endpoint}/${id}`);
   }
 
