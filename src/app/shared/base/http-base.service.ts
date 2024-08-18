@@ -28,7 +28,7 @@ export class HttpBaseService {
     return this.httpClient.put(`${this.apiBaseUrl}${endpoint}`, dados);
   }
   protected httpDelete(endpoint: string): Observable<any> {
-    return this.httpClient.delete(endpoint);
+    return this.httpClient.delete(`${this.apiBaseUrl}${endpoint}`);
   }
 
 

@@ -12,6 +12,10 @@ import { Router } from '@angular/router';
   standalone: true,
   imports: [MatPaginator, MatPaginatorModule, MatTableModule, MatIconModule],
   template: `
+  <div class="container flex">
+    <button mat-raised-button color="accent" class="bg-yellow-600 text-yellow-950 px-4 py-2 rounded-sm border-s-yellow-50 mb-4" (click)="novaCategoria()">Novo</button>
+
+</div>
    <div class="mx-8">
   <table mat-table [dataSource]="dataSource">
 
@@ -36,7 +40,7 @@ import { Router } from '@angular/router';
      <!-- Deletar Column -->
      <ng-container matColumnDef="deletar">
       <th mat-header-cell *matHeaderCellDef> Deletar </th>
-      <td mat-cell *matCellDef="let element"> <mat-icon class="text-red-700 cursor-pointer">delete</mat-icon> </td>
+      <td mat-cell *matCellDef="let element"> <mat-icon (click)="excluirCategoria(element.id)" class="text-red-700 cursor-pointer">delete</mat-icon> </td>
     </ng-container>
 
 
@@ -63,6 +67,13 @@ export class ListComponent implements AfterViewInit, OnInit {
   private categoriasService = inject(CategoriasService);
   private router = inject(Router);
 
+  buscarCategorias() {
+    this.categoriasService.getCategorias()
+      .subscribe((categorias: Categoria[]) => {
+        this.categorias = categorias;
+        this.dataSource.data = this.categorias;
+      });
+  }
   ngOnInit(): void {
     this.categoriasService.getCategorias()
       .subscribe((categorias: Categoria[]) => {
@@ -75,6 +86,15 @@ export class ListComponent implements AfterViewInit, OnInit {
   }
   chamarEdicao(categoria: Categoria): void {
     this.router.navigate(['categorias', 'editar', categoria.id]);
+  }
+  excluirCategoria(id: number) {
+    this.categoriasService.excluirCategoria(id)
+      .subscribe(resposta => {
+        this.buscarCategorias();
+      });
+  }
+  novaCategoria() {
+    this.router.navigate(['categorias', 'nova-categoria']);
   }
 }
 

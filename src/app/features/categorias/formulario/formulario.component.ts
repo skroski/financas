@@ -1,3 +1,4 @@
+import { timeoutProvider } from './../../../../../node_modules/rxjs/src/internal/scheduler/timeoutProvider';
 import { Component, inject, OnInit } from '@angular/core';
 import { MatInputModule } from '@angular/material/input';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
@@ -21,6 +22,7 @@ import { Categoria } from '../models/categoria.model';
     <mat-label>Descrição da Categoria</mat-label>
     <textarea matInput placeholder="Digite as informações importantes" formControlName="descricao"></textarea>
   </mat-form-field>
+   <button mat-button-raised color="primary" [disabled]="!formCategoria.valid" (click)="salvarCategoria()">Salvar</button>
 </form>
 
   `,
@@ -45,26 +47,38 @@ import { Categoria } from '../models/categoria.model';
 })
 export class FormularioComponent implements OnInit {
   categoria!: Categoria;
-  id: string = '';
+  id: string = ''
+  title: string = '';
+
   formCategoria!: FormGroup;
+  routeNavigate: string = 'form';
+  newFormCategoria: boolean = false;
 
   private categoriasService = inject(CategoriasService);
-  private route = inject(ActivatedRoute);
+  private activatedRoute = inject(ActivatedRoute);
   private formBuilder = inject(FormBuilder);
   private router = inject(Router);
 
 
+
   ngOnInit(): void {
-    this.id = this.route.snapshot.url[1].path;
+
+    this.routeNavigate = this.activatedRoute.snapshot.url[0].path;
     this.criarFormulario();
-    this.categoriasService.getCategoriasById(parseInt(this.id))
-      .subscribe((categoria: Categoria) => {
-        this.categoria = categoria;
-        this.formCategoria.controls['nome'].setValue(categoria.nome);
-        this.formCategoria.controls['descricao'].setValue(categoria.descricao);
-      })
+
+    if (this.routeNavigate === 'editar') {
+
+      this.title = 'Editar Categoria'
+
+      this.id = this.activatedRoute.snapshot.url[1].path;
+      this.buscarCategoriaPeloId();
+
+    } else {
+      this.newFormCategoria = true;
+    }
 
   }
+
   criarFormulario() {
     this.formCategoria = this.formBuilder.group(
       {
@@ -72,6 +86,55 @@ export class FormularioComponent implements OnInit {
         descricao: ['', Validators.required]
       }
     )
+  }
+  buscarCategoriaPeloId() {
+    this.categoriasService.getCategoriasById(parseInt(this.id))
+      .subscribe((categoria: Categoria) => {
+        this.categoria = categoria;
+        this.formCategoria.controls['nome'].setValue(categoria.nome);
+        this.formCategoria.controls['descricao'].setValue(categoria.descricao);
+      });
+  }
+
+
+  salvarCategoria() {
+
+    if (this.formCategoria.touched && this.formCategoria.dirty) {
+
+      const payload: Categoria = {
+        nome: this.formCategoria.controls['nome'].value,
+        descricao: this.formCategoria.controls['descricao'].value,
+      }
+
+      if (this.newFormCategoria) {
+        this.criarCategoria(payload)
+      } else {
+        payload.id = this.categoria.id;
+        this.editarCategoria(payload);
+      }
+
+    }
+
+  }
+
+  editarCategoria(payload: Categoria) {
+    this.categoriasService.alterarCategoria(payload)
+      .subscribe(resposta => {
+
+        //Retornar a tela anterior
+        this.router.navigate(['categorias']);
+
+      });
+  }
+
+  criarCategoria(payload: Categoria) {
+    this.categoriasService.criarCategoria(payload)
+      .subscribe(resposta => {
+
+        //Retornar a tela anterior
+        this.router.navigate(['categorias']);
+
+      });
   }
 
 }
